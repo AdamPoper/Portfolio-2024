@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>Hello World!</h1>
+        <div>
+            <label>Upload photo</label>
+            <input id="file-upload" type="file">
+        </div>
+        <button id="upload-btn">Upload Image</button>
+    </body>
+
+    <script>
+        document.getElementById('file-upload').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            console.log(file);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64 = e.target.result;
+                console.log(base64);
+
+                const description = file.name.split('.');
+                window.newPhoto = {
+                    buffer: base64,
+                    name: description[0],
+                    type: description[1]
+                }
+            }
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('upload-btn').addEventListener('click', (event) => {
+            const payload = window.newPhoto;
+            fetch('/photos/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    body: JSON.stringify(payload)
+                }
+            })
+            .then((res) => res.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+        })
+    </script>
+</html>
