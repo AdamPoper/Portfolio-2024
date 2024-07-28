@@ -1,0 +1,37 @@
+{
+  "name": "portfolio-server",
+  "version": "1.0.0",
+  "description": "portfolio-server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node build/app.js",
+    "build": "tsc",
+    "dev": "ts-node src/app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdamPoper/Portfolio-2024.git"
+  },
+  "author": "Adam Poper",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AdamPoper/Portfolio-2024/issues"
+  },
+  "homepage": "https://github.com/AdamPoper/Portfolio-2024#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "mysql2": "^3.10.2",
+    "os": "^0.1.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  }
+}
