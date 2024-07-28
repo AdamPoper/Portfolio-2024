@@ -18,7 +18,6 @@ export class Persistance {
     }
 
     static async selectEntityByNamedQuery<T>(query: string, args?: Array<any>): Promise<T> {
-        console.log(query, args);
         const [results] = await pool.execute(query, args);
         return (results as T[])[0] as T;
     }

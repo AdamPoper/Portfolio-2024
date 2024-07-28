@@ -41,7 +41,6 @@ function saveMediaFile(media: ProjectMediaModel, project_id: number): ProjectMed
     }
 
     const filepath = path.join(os.homedir(), process.env.PROJECT_MEDIA_DIR, filename);
-    console.log(filepath);
     fs.writeFile(filepath, buffer, (error) => {
         if (error) {
             throw new Error('Error saving project media');
