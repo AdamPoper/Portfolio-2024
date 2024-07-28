@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
-import { Photo, PHOTO_TABLE, PhotoModel, PhotoQueries, PhotoRequestBody } from '../entity/photo';
-import { Persistance } from '../persistance/persistance';
+import {Photo, PHOTO_TABLE, PhotoModel, PhotoQueries, PhotoRequestBody} from '../entity/photo';
+import {Persistance} from '../persistance/persistance';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import os from 'os';
@@ -56,4 +56,4 @@ const photoToModel = (photo: Photo): PhotoModel => {
     } as PhotoModel;
 }
 
-export default {getAllPhotos, addNewPhoto};;
+export default {getAllPhotos, addNewPhoto};

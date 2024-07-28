@@ -1,5 +1,6 @@
 import express from 'express';
 import photoRouter from './routes/photo';
+import projectRouter from './routes/project';
 import dotenv from 'dotenv';
 
 import path from 'path';
@@ -12,6 +13,7 @@ app.use(express.json({limit: '10mb'}));
 app.use(express.urlencoded({extended: false}));
 
 app.use('/photos', photoRouter);
+app.use('/projects', projectRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 

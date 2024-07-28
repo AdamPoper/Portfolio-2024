@@ -33,4 +33,28 @@ export class Persistance {
         const query = 'INSERT INTO ' + className + inserts + ' VALUES ' + insertCount;
         return await pool.execute(query, values);
     }
+
+    static async persistEntities<T>(className: string, entities: Array<Partial<T>>): Promise<any> {
+        if (entities.length === 0) {
+            return new Promise((resolve, reject) => {
+                resolve('No entities to persist');
+            });
+        }
+
+        const columns = Object.keys(entities[0]);
+        const values = new Array<unknown>();
+        entities.forEach(e => {
+            const objectValues = Object.values(e);
+            values.push(...objectValues);
+        })
+
+        const insertColumns = '(' + columns.join(', ') + ')';
+        const insertValues = entities.map(e => {
+            const objectValues = Object.values(e);
+            return '(' + objectValues.map(() => '?') + ')';
+        }).toString();
+
+        const query = 'INSERT INTO ' + className + insertColumns + ' VALUES ' + insertValues;
+        return await pool.execute(query, values);
+    }
 }
