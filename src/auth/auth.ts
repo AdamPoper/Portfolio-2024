@@ -46,7 +46,6 @@ export const createAdmin = async () => {
     const saltRounds = 10;
     const pw = process.env.ADMIN_PASSWORD;
     const hash = await bcrypt.hash(pw, saltRounds);
-    console.log('Hash ' + hash);
     const admin = {
         role: Role.ADMIN,
         username: process.env.ADMIN_USERNAME,
@@ -54,6 +53,6 @@ export const createAdmin = async () => {
     } as User;
 
     Persistance.persistEntity<User>(USER_TABLE, admin)
-        .then((newUser) => console.log(newUser))
+        .then(() => console.log('Successfully created admin'))
         .catch(e => console.error(e));
 }
