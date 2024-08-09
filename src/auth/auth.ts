@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { Persistance } from "../persistance/persistance";
-import { User, UserQueries } from "../entity/user";
+import { User, USER_TABLE, UserQueries } from "../entity/user";
+import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
+import {Role} from './roles';
+
+dotenv.config();
 
 export const basicAuth = (req: Request, res: Response, next: () => void): void => {
     const user = req.user;
@@ -35,4 +40,19 @@ export const authRole = (role: string) => {
 
         next();
     }
+}
+
+export const createAdmin = async () => {
+    const saltRounds = 10;
+    const pw = process.env.ADMIN_PASSWORD;
+    const hash = await bcrypt.hash(pw, saltRounds);
+    const admin = {
+        role: Role.ADMIN,
+        username: process.env.ADMIN_USERNAME,
+        password: hash
+    } as User;
+
+    Persistance.persistEntity<User>(USER_TABLE, admin)
+        .then(() => console.log('Successfully created admin'))
+        .catch(e => console.error(e));
 }
