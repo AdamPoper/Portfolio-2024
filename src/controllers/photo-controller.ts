@@ -38,10 +38,10 @@ const addNewPhoto = (req: Request, res: Response) => {
     Persistance.persistEntity<Photo>(PHOTO_TABLE, photo)
         .then(() => fs.writeFile(filePath, buffer, (error) => {
             if (error) {
-                res.sendStatus(500).send('Error saving file');
+                res.sendStatus(500).json({message: 'Error saving file'});
             }
 
-            res.send('Successfully persisted ' + photo.name);
+            res.json({message: 'Successfully persisted ' + photo.name});
         }));
 }
 
