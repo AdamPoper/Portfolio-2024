@@ -19,18 +19,19 @@ const addProject = (req: Request, res: Response, next: () => void): void => {
         github: body.github,
     } as Project;
 
-
     Persistance.persistEntity<Project>(PROJECT_TABLE, project)
         .then(([result]) => {
-            const mediaFiles = body.media.map(media => saveMediaFile(media, result.insertId));
-            return Persistance.persistEntities<ProjectMedia>(PROJECT_MEDIA_TABLE, mediaFiles);
+            if (body.media) {
+                const mediaFiles = body.media.map(media => saveMediaFile(media, result.insertId));
+                return Persistance.persistEntities<ProjectMedia>(PROJECT_MEDIA_TABLE, mediaFiles);
+            }
         })
         .then(() => res.status(200).send('Successfully saved project ' + project.title))
         .catch(() => res.status(500).send('Error saving project ' + project.title));
 }
 
 function saveMediaFile(media: ProjectMediaModel, project_id: number): ProjectMedia {
-    const filename = [media.name, media.type].join('.');
+    const filename = media.name;
     const bufferParts = media.buffer.split(',');
     const base64Data = bufferParts[1];
     const buffer = Buffer.from(base64Data, 'base64');
@@ -48,8 +49,7 @@ function saveMediaFile(media: ProjectMediaModel, project_id: number): ProjectMed
     });
 
     return {
-        name: media.name,
-        filetype: media.type,
+        name: filename,
         prefix: bufferParts[0],
         project_id,
         filepath,
