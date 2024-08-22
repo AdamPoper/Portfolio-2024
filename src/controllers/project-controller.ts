@@ -1,7 +1,7 @@
 import { Persistance } from '../persistance/persistance';
 import { Request, Response } from 'express';
-import { Project, PROJECT_TABLE, ProjectRequestBody } from '../entity/project';
-import { PROJECT_MEDIA_TABLE, ProjectMedia, ProjectMediaModel } from '../entity/projectmedia';
+import { Project, PROJECT_TABLE, ProjectModel, ProjectQueries } from '../entity/project';
+import { PROJECT_MEDIA_TABLE, ProjectMedia, ProjectMediaModel, ProjectMediaQueries } from '../entity/projectmedia';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import os from 'os';
@@ -10,7 +10,7 @@ import path from 'path';
 dotenv.config();
 
 const addProject = (req: Request, res: Response, next: () => void): void => {
-    const body = req.body as ProjectRequestBody;
+    const body = req.body as ProjectModel;
     const project = {
         title: body.title,
         technologies: body.technologies,
@@ -26,11 +26,26 @@ const addProject = (req: Request, res: Response, next: () => void): void => {
                 return Persistance.persistEntities<ProjectMedia>(PROJECT_MEDIA_TABLE, mediaFiles);
             }
         })
-        .then(() => res.status(200).send('Successfully saved project ' + project.title))
-        .catch(() => res.status(500).send('Error saving project ' + project.title));
+        .then(() => res.status(200).json({message: 'Successfully saved project ' + project.title}))
+        .catch(() => res.status(500).json({message: 'Error saving project ' + project.title}));
 }
 
-function saveMediaFile(media: ProjectMediaModel, project_id: number): ProjectMedia {
+const fetchAllProjects = (req: Request, res: Response): void => {
+    Persistance.selectEntitiesByNamedQuery<Project>(ProjectQueries.QUERY_ALL)
+        .then((projects: Project[]) => res.status(200).json(projects));
+}
+
+const fetchProjectMedia = (req: Request, res: Response): void => {
+    if (!req.params.id) {
+        throw new Error("No project id");
+    }
+
+    Persistance.selectEntitiesByNamedQuery<ProjectMedia>(ProjectMediaQueries.QUERY_BY_PROJECT_ID, [req.params.id])
+        .then((media: ProjectMedia[]) => media.map(pm => projectMediaToModel(pm)))
+        .then((models: ProjectMediaModel[]) => res.status(200).json(models));
+}
+
+const saveMediaFile = (media: ProjectMediaModel, project_id: number): ProjectMedia => {
     const filename = media.name;
     const bufferParts = media.buffer.split(',');
     const base64Data = bufferParts[1];
@@ -56,4 +71,14 @@ function saveMediaFile(media: ProjectMediaModel, project_id: number): ProjectMed
     } as ProjectMedia;
 }
 
-export default {addProject};
+const projectMediaToModel = (media: ProjectMedia): ProjectMediaModel => {
+    const buffer = fs.readFileSync(media.filepath);
+    const base64String = buffer.toString('base64');
+    const result = [media.prefix, base64String].join(',');
+    return {
+        buffer: result,
+        name: media.name
+    } as ProjectMediaModel
+}
+
+export default {addProject, fetchAllProjects, fetchProjectMedia};
