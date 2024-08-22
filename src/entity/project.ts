@@ -12,7 +12,7 @@ export interface Project extends RowDataPacket {
     github?: string;
 }
 
-export interface ProjectRequestBody {
+export interface ProjectModel {
     title: string;
     technologies: string;
     description: string;
@@ -21,3 +21,6 @@ export interface ProjectRequestBody {
     media: ProjectMediaModel[];
 }
 
+export const ProjectQueries = {
+    QUERY_ALL: 'select * from Project'
+}

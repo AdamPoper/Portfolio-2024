@@ -14,3 +14,7 @@ export interface ProjectMediaModel {
     name: string;
     buffer: string;
 }
+
+export const ProjectMediaQueries = {
+    QUERY_BY_PROJECT_ID: 'select * from project_media where project_id = ?'
+}
