@@ -22,6 +22,13 @@ export class Persistance {
         return (results as T[])[0] as T;
     }
 
+    static async selectEntitiesByNamedQueryPaged<T>(query: string, pageSize: number, pageNumber: number, args?: Array<any>): Promise<Array<T>> {
+        const [results] = await pool.execute(query, args);
+        const start = pageSize * pageNumber;
+        const end = start + pageSize;
+        return (results as T[]).slice(start, end);
+    }
+
     static async persistEntity<T>(className: string, entity: Partial<T>): Promise<any> {
         const columns = Object.keys(entity);
         const values = Object.values(entity);
