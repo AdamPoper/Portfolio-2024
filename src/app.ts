@@ -15,8 +15,8 @@ dotenv.config();
 
 const app = express();
 
-app.use(express.json({limit: '10mb'}));
-app.use(express.urlencoded({extended: false}));
+app.use(express.json({limit: '1024mb'}));
+app.use(express.urlencoded({limit: '1024mb', extended: false}));
 app.use(cors());
 
 app.use('/photos', photoRouter);
