@@ -15,6 +15,6 @@ export interface UserRequestBody {
 }
 
 export const UserQueries = {
-    GET_USER_BY_ID: "SELECT * FROM USER WHERE id = ?",
-    GET_USER_BY_USERNAME: "SELECT * FROM USER WHERE username = ?",
+    GET_USER_BY_ID: "SELECT * FROM user WHERE id = ?",
+    GET_USER_BY_USERNAME: "SELECT * FROM user WHERE username = ?",
 }

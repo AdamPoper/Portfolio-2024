@@ -1,7 +1,7 @@
 import { RowDataPacket } from "mysql2";
 import { ProjectMediaModel } from "./projectmedia";
 
-export const PROJECT_TABLE = 'Project';
+export const PROJECT_TABLE = 'project';
 
 export interface Project extends RowDataPacket {
     id: number;
@@ -22,5 +22,5 @@ export interface ProjectModel {
 }
 
 export const ProjectQueries = {
-    QUERY_ALL: 'select * from Project'
+    QUERY_ALL: 'select * from project'
 }
