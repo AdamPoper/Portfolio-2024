@@ -1,6 +1,6 @@
 import { RowDataPacket } from "mysql2";
 
-export const PHOTO_TABLE = 'Photo';
+export const PHOTO_TABLE = 'photo';
 
 export interface Photo extends RowDataPacket {
     id: number;

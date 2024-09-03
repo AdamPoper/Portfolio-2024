@@ -1,6 +1,6 @@
 import { RowDataPacket } from "mysql2";
 
-export const USER_TABLE = 'User';
+export const USER_TABLE = 'user';
 
 export interface User extends RowDataPacket {
     id: number;
