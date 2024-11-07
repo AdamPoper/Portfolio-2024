@@ -7,6 +7,7 @@ export interface User extends RowDataPacket {
     role: string;
     username: string;
     password: string;
+    file_loc_ind: number;
 }
 
 export interface UserRequestBody {
