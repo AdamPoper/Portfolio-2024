@@ -3,6 +3,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+interface GenericEntity {
+    id: number;
+}
+
 export const pool = mysql2.createPool({
     host: 'localhost',
     user: process.env.DB_USERNAME,
@@ -62,5 +66,18 @@ export class Persistance {
 
         const query = 'INSERT INTO ' + className + insertColumns + ' VALUES ' + insertValues;
         return await pool.execute(query, values);
+    }
+
+    static async updateEntity<T extends GenericEntity>(className: string, entity: Partial<T>): Promise<any> {
+        let query: string = `UPDATE ${className} SET `;
+        const entityId = entity.id;
+        delete entity.id;
+        const params = Object.values(entity);
+        const setClauses = Object.keys(entity).map(key => `${key} = ?`);
+
+        params.push(entityId);
+        query += setClauses.join(', ');
+        query += ` WHERE id = ?;`;
+        return await pool.execute(query, params);
     }
 }

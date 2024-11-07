@@ -49,7 +49,8 @@ export const createAdmin = async () => {
     const admin = {
         role: Role.ADMIN,
         username: process.env.ADMIN_USERNAME,
-        password: hash
+        password: hash,
+        file_loc_ind: 0
     } as User;
 
     Persistance.persistEntity<User>(USER_TABLE, admin)
